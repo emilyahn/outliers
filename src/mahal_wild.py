@@ -18,6 +18,7 @@ from sklearn.covariance import MinCovDet
 def main():
 	formant_file = sys.argv[1]
 	out_csv = sys.argv[2]
+	VOWEL_NUM_THRESH = 100
 
 	fields = ['file', 'vowel', 'prec', 'foll', 'start', 'end', 'f1_mid', 'f2_mid']
 	df = pd.read_csv(formant_file, usecols=fields)
@@ -35,8 +36,8 @@ def main():
 		for vowel in vowel_set:
 			vowel_df = df[df['vowel'] == vowel]
 
-			# only take vowels that occur >= 100 times
-			if len(vowel_df) < 100:
+			# only take vowels that occur >= VOWEL_NUM_THRESH times
+			if len(vowel_df) < VOWEL_NUM_THRESH:
 				continue
 
 			f12 = np.stack((vowel_df['f1_mid'], vowel_df['f2_mid']), axis=1)
@@ -47,7 +48,6 @@ def main():
 				f1 = vowel_df['f1_mid'][index]
 				f2 = vowel_df['f2_mid'][index]
 				mahal_dist = f12_cov.mahalanobis([[f1, f2]])
-				# import pdb; pdb.set_trace()
 
 				writer.writerow({'file': vowel_df['file'][index], 'vowel': vowel_df['vowel'][index], 'prec': vowel_df['prec'][index], 'foll': vowel_df['foll'][index], 'start': f'{vowel_df["start"][index]:.2f}', 'end': f'{vowel_df["end"][index]:.2f}', 'F1': f'{f1:.2f}', 'F2': f'{f2:.2f}','MD': f'{mahal_dist[0]:.3f}'})  # only 2 or 3 digits
 

@@ -9,11 +9,12 @@ import pandas as pd
 # ex:
 # python src/q_xs2ipa.py data/wild/formant_raw data/wild/formant_ipa formant_csv
 # python src/q_xs2ipa.py /Users/eahn/work/typ/data/voxclamantis/tg/{lang} data/wild/tg_ipa/{lang}/ tg
+# python src/q_xs2ipa.py /Users/eahn/work/typ/data/voxclamantis/lex_epi/KAZKAZ_epitran_pronunciation.lex data/wild/KAZKAZ_epitran_ipa.lex lex
 
 table_csv = '/Users/eahn/work/tools/epitran-master/epitran/data/ipa-xsampa.csv'
 in_folder = sys.argv[1]  # no final /
 out_folder = sys.argv[2]  # no final /
-file_type = sys.argv[3]  # 'tg' or 'formant_csv'
+file_type = sys.argv[3]  # 'tg', 'formant_csv', or 'lex'
 
 xs_ipa_dict = {}
 with open(table_csv, 'r') as f:
@@ -38,7 +39,55 @@ def get_longest_prefix(in_str):
 	return in_str, None
 
 
-if file_type == 'tg':
+if file_type == 'lex':
+	with open(in_folder, 'r') as r:
+		sorted_lines = sorted(r.readlines())
+		with open(out_folder, 'w') as w:
+			xs_ipa_csv_dict = {}
+
+			for line in sorted_lines:
+				line = line.strip()
+				if not line:
+					continue
+
+				word = line.split('\t')[0]
+				phones = line.split('\t')[1].split()
+
+				ipa_phones = []
+				for phone in phones:
+					if type(phone) is not str:
+						continue
+
+					elif phone in xs_ipa_csv_dict:
+						ipa_phones.append(xs_ipa_csv_dict[phone])
+
+					elif phone in xs_ipa_dict:
+						xs_ipa_csv_dict[phone] = xs_ipa_dict[phone]
+						ipa_phones.append(xs_ipa_csv_dict[phone])
+
+					else:
+						# multiple symbols in phone (e.g. contains diacritics)
+						ipa = ''
+						leftover = phone
+						# import pdb; pdb.set_trace()
+						while leftover:
+							longest_prefix, remainder = get_longest_prefix(leftover)
+							# import pdb; pdb.set_trace()
+							if remainder is None:
+								break
+							ipa += xs_ipa_dict[longest_prefix]
+							if remainder in xs_ipa_dict:
+								ipa += xs_ipa_dict[remainder]
+								leftover = ''  # all done!
+							else:
+								leftover = remainder
+
+						xs_ipa_csv_dict[phone] = ipa
+						ipa_phones.append(xs_ipa_csv_dict[phone])
+
+				w.write(f'{word}\t{" ".join(ipa_phones)}\n')
+
+elif file_type == 'tg':
 	for in_file in glob.glob(f'{in_folder}/*.TextGrid'):
 		out_file = f'{out_folder}/{os.path.basename(in_file)}'
 		with open(in_file, 'r') as r:

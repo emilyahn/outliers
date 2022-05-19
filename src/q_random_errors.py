@@ -6,7 +6,7 @@ import pandas as pd
 # take errors greater than OUTLIER_THRESH(old) and take random NUM_SAMPLES (e.g. 100) subset
 # write to CSV
 # ex.
-# python src/q_random_formants.py data/wild/mahal/KAZKAZ_vowels_all.csv data/wild/annotate/KAZKAZ_errors_100.csv
+# python src/q_random_errors.py data/wild/mahal/KAZKAZ_vowels_all.csv data/wild/annotate/KAZKAZ_errors_100.csv
 
 full_csv = sys.argv[1]
 out_csv = sys.argv[2]

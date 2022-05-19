@@ -20,10 +20,22 @@ Outlier Analysis of Phone-aligned Audio
 * From formant files, create distributions per vowel with `src/mahal_{wild,cv}.py`
 	* uses SciKit Learn package [MinCovDet](https://scikit-learn.org/stable/modules/generated/sklearn.covariance.MinCovDet.html)
 	* output to another csv file with column 'MD' (Mahalanobis distance)
+	* `src/mahal_cv.py` can take a subset argument to only get n utterances (used in this case for Common Voice Swedish)
 * To get outliers at 0.1% edge of distribution, use mahal_thresh = 13.82  (alpha = 0.001, 2 degrees of freedom)
-* Subset errors (thresh = 13.82, num_samples = 100) with `python src/q_random_formants.py data/wild/mahal/{lang}_vowels_all.csv data/wild/annotate/{lang}_vowels_100.csv`
+* Subset errors (thresh = 13.82, num_samples = 100) with `python src/q_random_errors.py data/wild/mahal/{lang}_vowels_all.csv data/wild/annotate/{lang}_vowels_100.csv`
+	* Subset at other points along the MD distribution (e.g. 'near-perfect' samples)
 * Move only num_samples audio and textgrids into folders for annotation:
 ```sh
+# wild errors
 lang="SWESFV"; for utt_id in `cat data/wild/annotate/${lang}_errors_100.csv | tail -n +2 | cut -d"," -f1 | sort -u`; do source_file="/Users/eahn/work/typ/data/audio/wav_seg/${lang}/${utt_id}.wav"; cp $source_file data/wild/audio/${lang}_errors_100; done
 lang="SWESFV"; for utt_id in `cat data/wild/annotate/${lang}_errors_100.csv | tail -n +2 | cut -d"," -f1 | sort -u`; do source_file="data/wild/tg_ipa/${lang}/${utt_id}.TextGrid"; cp $source_file data/wild/annotate/tg/${lang}_errors_100; done
+# wild good
+lang="SWESFV"; wav_dir="data/wild/audio/${lang}_good_40_wav"; mkdir $wav_dir; for utt_id in `cat data/wild/annotate/${lang}_good_40.csv | tail -n +2 | cut -d"," -f1 | sort -u`; do source_file="/Users/eahn/work/typ/data/audio/wav_seg/${lang}/${utt_id}.wav";  cp $source_file $wav_dir; done
+lang="SWESFV"; tg_dir="data/wild/annotate/tg/${lang}_good_40_tg"; mkdir $tg_dir; for utt_id in `cat data/wild/annotate/${lang}_good_40.csv | tail -n +2 | cut -d"," -f1 | sort -u`; do source_file="data/wild/tg_ipa/${lang}/${utt_id}.TextGrid";  cp $source_file $tg_dir; done
+# cv errors
+lang="kazakh"; wav_dir="data/cv8/annotate/${lang}_errors_100_wav"; mkdir $wav_dir;for utt_id in `cat data/cv8/annotate/${lang}_errors_100.csv | tail -n +2 | cut -d"," -f1 | sort -u`; do source_file="data/cv8/${lang}/prep_validated/${utt_id}.wav";  cp $source_file $wav_dir; done
+lang="hausa"; tg_dir="data/cv8/annotate/${lang}_errors_100_tg"; mkdir $tg_dir;for utt_id in `cat data/cv8/annotate/${lang}_errors_100.csv | tail -n +2 | cut -d"," -f1 | sort -u`; do source_file="data/cv8/${lang}/aligned_validated/${utt_id}.TextGrid";  cp $source_file $tg_dir; done
+# cv good files
+lang="kazakh"; wav_dir="data/cv8/annotate/${lang}_good_40_wav"; mkdir $wav_dir;for utt_id in `cat data/cv8/annotate/${lang}_good_40.csv | tail -n +2 | cut -d"," -f1 | sort -u`; do source_file="data/cv8/${lang}/prep_validated/${utt_id}.wav";  cp $source_file $wav_dir; done
+lang="hausa"; tg_dir="data/cv8/annotate/${lang}_good_40_tg"; mkdir $tg_dir;for utt_id in `cat data/cv8/annotate/${lang}_good_40.csv | tail -n +2 | cut -d"," -f1 | sort -u`; do source_file="data/cv8/${lang}/aligned_validated/${utt_id}.TextGrid";  cp $source_file $tg_dir; done
 ```

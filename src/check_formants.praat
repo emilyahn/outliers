@@ -1,13 +1,13 @@
-# process Wilderness only
+# process Common Voice
 
 # replace w/ appropriate 6-digit code
-lang$ = "HAUCLV"
-tgdir$ = "/Users/eahn/work/outliers/data/wild/annotate/tg/" + lang$ + "_errors_100/"
-wavdir$ = "/Users/eahn/work/outliers/data/wild/audio/" + lang$ + "_errors_100/"
-outlierfile$ = "/Users/eahn/work/outliers/data/wild/annotate/" + lang$ + "_errors_100.csv"
-# tgdir$ = "/Users/eahn/work/outliers/data/wild/annotate/tg/" + lang$ + "_good_40_tg/"
-# wavdir$ = "/Users/eahn/work/outliers/data/wild/audio/" + lang$ + "_good_40_wav/"
-# outlierfile$ = "/Users/eahn/work/outliers/data/wild/annotate/" + lang$ + "_good_40.csv"
+lang$ = "kazakh"
+tgdir$ = "/Users/eahn/work/outliers/data/cv8/annotate/" + lang$ + "_good_40_tg/"
+wavdir$ = "/Users/eahn/work/outliers/data/cv8/annotate/" + lang$ + "_good_40_wav/"
+outlierfile$ = "/Users/eahn/work/outliers/data/cv8/annotate/" + lang$ + "_good_40.csv"
+# tgdir$ = "/Users/eahn/work/outliers/data/cv8/" + lang$ + "/aligned_validated/"
+# wavdir$ = "/Users/eahn/work/outliers/data/cv8/" + lang$ + "/prep_validated/"
+# outlierfile$ = "/Users/eahn/work/outliers/data/cv8/annotate/" + lang$ + "_good_25.csv"
 
 Read Table from comma-separated file: outlierfile$
 Rename: "checkme"
