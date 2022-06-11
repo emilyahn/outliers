@@ -8,6 +8,7 @@ Outlier Analysis of Phone-aligned Audio
 * extract formants with `src/getFormantsCommonVoice_highlow.praat` (under high and low settings)
 * assign each speaker to either high or low formant setting (will use only low for analysis) with `python src/assign_formant_range.py > data/cv8/formants/settings_highlow.tsv`
 	* filter this file to just get low setting speakers: `head -1 data/cv8/formants/settings_highlow.tsv > data/cv8/formants/settings_low.tsv; cat data/cv8/formants/settings_highlow.tsv | awk '$3 == "low" {print}' >> data/cv8/formants/settings_low.tsv`
+* quick file to just get formant data of F1/F2 midpoints and low setting speakers only: `src/q_simplify_cv_formants.py`
 
 ### Wilderness
 * download formants from VoxClamantis (now stored in `data/wild/formant_raw/`); F1/F2 midpoints only
