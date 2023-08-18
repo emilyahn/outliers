@@ -7,6 +7,21 @@ Emily P. Ahn (University of Washington)
 * Python 3.9.0
 * Montreal Forced Aligner 2.0.0 (via conda)
 * R 4.2.2
+* Praat 6.0.16
+
+## Documentation
+* Paper PDF: `./Outliers_Interspeech_230601.pdf`
+* Poster PDF: `./poster_interspeech_emilyahn_2023.pdf`
+
+### Citation
+```
+@inproceedings{ahn_outlier_2023,
+  title={An Outlier Analysis of Vowel Formants from a Corpus Phonetics Pipeline},
+  author={Ahn, Emily P and Levow, Gina-Anne and Wright, Richard A and Chodroff, Eleanor},
+  year = {2023},
+  booktitle = {Interspeech},
+}
+```
 
 ## Notes for this Repository
 * Disclaimer: scripts that are 'quick-and-dirty' start with `q_` and are not meant to reflect high quality code
@@ -22,8 +37,10 @@ Emily P. Ahn (University of Washington)
 * additional script to get AVG F1/F2 per vowel per speaker: `src/get_avg_form_cvlow.py`
 
 ### Wilderness
+* download audio from (Faith Comes by Hearing)[https://www.faithcomesbyhearing.com/audio-bible-resources/mp3-downloads]
+* segment audio: follow steps from CMU Wilderness (dataset)[https://github.com/festvox/datasets-CMU_Wilderness]
+* download TextGrids from (VoxClamantis)[https://voxclamantisproject.github.io/]
 * download formants from VoxClamantis (now stored in `data/wild/formant_raw/`); F1/F2 midpoints only
-* download TextGrids from VoxClamantis
 * convert formant phones from XSAMPA to IPA with `python src/q_xs2ipa.py data/wild/formant_raw data/wild/formant_ipa formant_csv`
 * convert TextGrid phones from XSAMPA to IPA with `python src/q_xs2ipa.py /Users/eahn/work/typ/data/voxclamantis/tg/{lang} data/wild/tg_ipa/{lang}/ tg`
 
@@ -54,6 +71,14 @@ lang="hausa"; tg_dir="data/cv8/annotate/${lang}_good_40_tg"; mkdir $tg_dir;for u
 ```
 
 ## Annotations
-* Guidelines: `PDF FILE`
+* Guidelines: see `./AnnotationGuidelines.pdf`
 * Master spreadsheet including re-annotations with new Formant category: `data/master_reannot_221114.csv`
 
+## Analysis
+* logistic regression for Kazakh high vowel deletion case study:
+	* prep data: `src/prep_logregsib_data.py`
+	* run regression in R: `src/logreg_deletion.R`
+
+## Acknowldgments
+We thank Anna Batra, Sam Briggs, Ivy Guo, and Emma Miller for their work on the annotations, processing of results, and exploratory data analyses.
+Author EPA was supported by NSF GRFP grant DGE-2140004, and Author EC by SNSF grant 208460.
