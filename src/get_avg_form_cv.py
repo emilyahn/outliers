@@ -11,13 +11,14 @@ from scipy.stats import norm
 # for 1 Common Voice lang, get AVG F1/F2 per vowel per speaker
 # outfile format: spkr_id, vowel, F1 avg, F2 avg, V_count_spkr
 # to run:
-# python get_avg_form_cvlow.py {lang} {narrow|broad} {filter|no_filter}
+# python get_avg_form_cvlow.py {lang} {narrow|broad} {filter|no_filter} {formant_file}
 # ex:
-# python src/get_avg_form_cvlow.py hausa narrow filter > data/cv8/formants/hausa_avg_formants_narrow_filter.tsv
+# python src/get_avg_form_cvlow.py hausa narrow filter data/cv8/hausa/hausa_formants_low2.csv > data/cv8/formants/hausa_avg_formants_narrow_filter.tsv
 
 lang = sys.argv[1]
 narrow_broad = sys.argv[2]  # 'narrow' or 'broad'
 filter_out = sys.argv[3]  # 'filter' or 'no_filter'
+formant_file = sys.argv[4]  # ex. data/cv8/{lang}/{lang}_formants_low2.csv
 
 if filter_out == 'filter':
 	filter_out = True
@@ -27,9 +28,6 @@ else:
 is_swedish = False
 if lang == 'swedish':
 	is_swedish = True
-
-# load low formant files
-low_formant_infile = f'data/cv8/{lang}/{lang}_formants_low2.csv'
 
 if is_swedish:
 	# load formant file
@@ -67,8 +65,7 @@ def process_vowel(raw_vowel, nar_bro):
 	return vowel
 
 
-def process_vowel_dict(formant_infile, setting):
-	# spkr_list = setting_dict[setting]
+def process_vowel_dict(formant_infile):
 	spkr_vowel_dict = {}  # spkr_vowel_dict[spkr][vowel] = list(tuples(f1,f2))
 	vowel_ft_dict = {}  # vowel_ft_dict[vowel][{'f1','f2'}] = list(float)
 	# skip_dur = 0
@@ -185,5 +182,4 @@ def process_vowel_dict(formant_infile, setting):
 	# print(skip_thresh, file=sys.stderr)
 
 print('spkr\tvowel\tmean_f1\tmean_f2\tV_count_spkr')
-process_vowel_dict(low_formant_infile, 'low')
-# process_vowel_dict(high_formant_infile, 'high')
+process_vowel_dict(formant_infile)
